@@ -52,7 +52,9 @@ header {
   background-color: var(--foreground);
   border-radius: 10px;
   transform-origin: left center;
-  transition: opacity var(--animation-timing), width var(--animation-timing), rotate var(--animation-timing), background-color var(--animation-timing), translate var(--animation-timing);
+  transition: opacity var(--animation-timing), width var(--animation-timing),
+    rotate var(--animation-timing), background-color var(--animation-timing),
+    translate var(--animation-timing);
 }
 
 .hamburger-menu input {
@@ -63,18 +65,21 @@ header {
   pointer-events: none;
 }
 
-.hamburger-menu:has(input:checked) {
+.hamburger-menu:has(input:checked),
+.hamburger-menu-active {
   --foreground: #fff;
   --background: #333;
 }
 
-.hamburger-menu:has(input:checked)::before {
+.hamburger-menu:has(input:checked)::before,
+.hamburger-menu-active::before {
   rotate: 45deg;
   width: var(--x-width);
   translate: 0 calc(var(--bar-height) / -2);
 }
 
-.hamburger-menu:has(input:checked)::after {
+.hamburger-menu:has(input:checked)::after,
+.hamburger-menu-active::after {
   rotate: -45deg;
   width: var(--x-width);
   translate: 0 calc(var(--bar-height) / 2);
@@ -89,7 +94,7 @@ header {
 .hamburger-menu:has(input:focus-visible)::after,
 .hamburger-menu input:focus-visible {
   border: 1px solid var(--background);
-  box-shadow: 0 0 0 0 1px var(--foreground);
+  box-shadow: 0 0 0 1px var(--foreground);
 }
 
 .sidebar {
@@ -106,21 +111,57 @@ header {
   transition: transform var(--animation-timing);
 }
 
-.hamburger-menu:has(input:checked)+.sidebar {
+.sidebar-visible {
   transform: translateX(0);
 }
 
 .logo {
   position: absolute;
-  /* top: calc( var(--hamburger-margin)); */
   left: 50%;
-  transform: translate(-50%, );
+  transform: translateX(-50%);
 }
 
 .list {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.navigationImage {
+  opacity: 0;
+  transform: translateY(10px);
+  /* Start below the original position */
+  visibility: hidden;
+  /* position: absolute; */
+  height: 0;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, visibility 0s 0.5s, height 0.5s ease-in-out;
+  /* Visibility hides after the fade */
+}
+
+.isShowing {
+  opacity: 1;
+  transform: translateY(0);
+  /* Move to the original position */
+  visibility: visible;
+  margin-bottom: 0.75rem;
+  height: 40px;
+  position: relative;
+  /* Make it take up space when visible */
+  transition: opacity 0.5s ease-in-out, transform 0.7s ease-in-out, visibility 0s, height 0.7s ease-in-out;
+  /* No delay on visibility when showing */
+}
+
+
+.navigationGrow {
+  width: 70px;
+  height: 200px;
+  transition: height 0.5s ease-in-out, width 0.5s ease-in-out;
+}
+
+.navigationShrink {
+  width: 50px;
+  height: 100px;
+  transition: height 0.5s ease-in-out, width 0.5s ease-in-out;
 }
 
 @media screen and (min-width: 768px) {
@@ -135,7 +176,6 @@ header {
     transform: none;
     width: max-content;
     margin-right: 20px;
-
   }
 
   .list {
@@ -146,21 +186,3 @@ header {
     display: none;
   }
 }
-
-
-.myImage {
-  opacity: 0;
-  transform: translateY(20px); /* Start below the original position */
-  visibility: hidden;
-  position: absolute;
-  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s 0.5s; /* Visibility delay ensures it's hidden after the animation */
-}
-
-.isShowing {
-  opacity: 1;
-  transform: translateY(0); /* Move to the original position */
-  visibility: visible;
-  position: relative; /* Make it take up space when visible */
-  transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s; /* Visibility shows immediately */
-}
-

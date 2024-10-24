@@ -24,16 +24,29 @@ export default function FloatingNavigation() {
 
   const handleArrowClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log(window.scrollY);
   };
-  const handleCircleClick = () => {
-    console.log(123);
 
-    // setShowContacts(true);
+  const handleCircleClick = () => {
     setIsShowing((p) => !p);
+    document.addEventListener('keypress', () => {
+      setIsShowing(false);
+    });
+    document.addEventListener('scroll', () => {
+      setIsShowing(false);
+    });
+    return () => {
+      document.removeEventListener('keypress', () => {
+        setIsShowing(false);
+      });
+    };
   };
   return (
-    <div className='arrow fixed bottom-20 right-10 cursor-pointer flex flex-col gap-5'>
+    <div
+      className={`fixed bottom-[60px] right-[15px] cursor-pointer flex flex-col justify-center items-center bg-slate-700 bg-opacity-20 backdrop-blur-[3px] rounded-lg 
+        ${!showNav && 'hidden'} ${
+        isShowing ? 'navigationGrow' : 'navigationShrink'
+      }`}
+    >
       {showNav && (
         <>
           <Image
@@ -42,21 +55,22 @@ export default function FloatingNavigation() {
             width={30}
             height={30}
             onClick={handleArrowClick}
+            className='mb-3'
           />
-          <div className='flex flex-col gap-5 imageContainer h-max'>
+          <div className='flex flex-col imageContainer h-max'>
             <Image
               src='phone.svg'
               alt='phone'
               width={30}
               height={30}
-              className={`myImage ${isShowing ? 'isShowing' : ''}`}
+              className={`navigationImage ${isShowing && 'isShowing'}`}
             />
             <Image
               src='email.svg'
               alt='email'
               width={30}
               height={30}
-              className={`myImage ${isShowing ? 'isShowing' : ''}`}
+              className={`navigationImage ${isShowing && 'isShowing'}`}
             />
             <Image
               src='circle.svg'
